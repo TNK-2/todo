@@ -14,6 +14,10 @@ gem "puma", "~> 5.0"
 
 gem 'jwt'
 
+gem 'factory_bot_rails'
+
+gem 'faker'
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
