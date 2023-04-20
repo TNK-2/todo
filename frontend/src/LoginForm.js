@@ -13,7 +13,7 @@ function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
   
-    const response = await fetch('http://localhost:3000/api/v1/login', {
+    const response = await fetch('http://localhost/api/v1/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
