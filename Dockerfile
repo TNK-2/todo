@@ -1,21 +1,26 @@
 FROM ruby:3.0.0-alpine
 
-RUN apk update && apk add build-base nodejs yarn postgresql-dev tzdata sqlite-dev
+ENV LANG="C.UTF-8" \
+    PACKAGES="curl-dev build-base alpine-sdk tzdata less ruby-dev nodejs" \
+    APP_PATH="/app"
 
-WORKDIR /app
+RUN apk update && \
+    apk add --no-cache --update $PACKAGES
 
-COPY Gemfile* ./
+WORKDIR $APP_PATH
 
-RUN apk add --no-cache --virtual .build-deps \
-        build-base \
-        linux-headers \
- && gem install bundler -v '2.2.22' \
- && bundle install \
- && apk del .build-deps
+COPY Gemfile Gemfile.lock ./
 
-# Install missing libraries
-RUN apk add --no-cache sqlite-dev libc6-compat
+RUN gem install bundler && \
+    bundle install
 
-COPY . .
+# Create a new Rails application
+RUN rails new . --force --database=sqlite3 --skip-bundle --skip-javascript --skip-git
 
-CMD ["rails", "s", "-b", "0.0.0.0"]
+COPY . ./
+
+RUN bundle install
+
+EXPOSE 3000
+
+CMD ["rails", "server", "-b", "0.0.0.0", "-p", "3000"]

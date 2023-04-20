@@ -2,7 +2,7 @@ version: '3.9'
 services:
   todo-api:
     build: .
-    command: bundle exec rails s -p 3000
+    command: rails db:migrate --trace && rails s
     ports:
       - "3000:3000"
     expose:
@@ -31,3 +31,19 @@ services:
     depends_on:
       - todo-api
       - todo-front
+
+  todo-db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+      - "./db/conf/my.cnf:/etc/mysql/my.cnf"
+    platform: linux/amd64
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      BIND-ADDRESS: 0.0.0.0
+
+volumes:
+  mysql-data:
+    driver: local
