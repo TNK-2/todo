@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -12,21 +14,14 @@ function LoginForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
     const response = await fetch('http://localhost:3000/api/v1/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ "email": user.email, "password": user.password }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user }),
     });
-  
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-  
     const data = await response.json();
-    console.log(data); // APIからのレスポンスをログに出力する
+    localStorage.setItem('token', data.token);
+    navigate('/todo-list');
   };
 
   return (

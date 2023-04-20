@@ -10,8 +10,8 @@ module Api
       def create
         user = User.new(user_params)
         if user.save
-          expired_date = 30.minutes.from_now
-          render json: { token: JsonWebToken.encode(user_id: user.id), expired_date: expired_date }, status: :created
+          expired_date = Time.zone.now + 30.minutes
+          render json: { token: JsonWebToken.encode(user_id: user.id, expired_date: expired_date), expired_date: expired_date }, status: :created
         else
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end

@@ -1,39 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 
 function App() {
-  const [isLoginForm, setIsLoginForm] = useState(true);
-
-  const handleSignupClick = () => {
-    setIsLoginForm(false);
-  };
-
-  const handleLoginClick = () => {
-    setIsLoginForm(true);
-  };
-
   return (
-    <div>
-      <h1>Welcome to my app</h1>
-      {isLoginForm ? (
-        <>
-          <LoginForm />
-          <p>
-            Don't have an account yet?{' '}
-            <button onClick={handleSignupClick}>Signup</button>
-          </p>
-        </>
-      ) : (
-        <>
-          <SignupForm />
-          <p>
-            Already have an account?{' '}
-            <button onClick={handleLoginClick}>Login</button>
-          </p>
-        </>
-      )}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<SignupForm />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
