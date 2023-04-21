@@ -17,7 +17,7 @@ function LoginForm() {
     const response = await fetch('http://localhost:3000/api/v1/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user }),
+      body: JSON.stringify({ "email": user.email, "password": user.password }),
     });
     const data = await response.json();
     localStorage.setItem('token', data.token);
