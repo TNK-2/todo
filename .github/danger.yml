@@ -1,0 +1,21 @@
+name: Danger
+on:
+  pull_request:
+  pull_request_review:
+jobs:
+  danger:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.5'
+    - name: Setup gems
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Run Danger
+      env:
+        GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+      run: bundle exec danger
